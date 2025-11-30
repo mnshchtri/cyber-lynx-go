@@ -11,6 +11,7 @@ import Payloads from '../pages/Payloads';
 import Reports from '../pages/Reports';
 import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
+import Terminal from '../pages/Terminal'; // Import the new Terminal component
 
 const MainContent = () => {
   return (
@@ -27,6 +28,7 @@ const MainContent = () => {
         <Route path="/reports" element={<Reports />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/terminal" element={<Terminal />} /> {/* Add the new Terminal route */}
       </Routes>
     </main>
   );
