@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-primary: #fff;
+  --primary: #ff6d1f;
+  --primary-dark: #6c63ff;
+  --secondary: #a0aec0;
+  --success: #38a169;
+  --warning: #dd6b20;
+  --danger: #e53e3e;
+  --surface-light: #f7fafc;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --text-muted: #a0aec0;
+}
+
+.dark {
+  --background-primary: #1f2838;
+  --surface-light: #2d3748;
+  --text-primary: #fff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+}
+
+body {
+  background-color: var(--background-primary);
+  color: var(--text-secondary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stat-card {
+  @apply bg-surface-light p-4 rounded-lg shadow-md;
+}
+
+.chart-container {
+  @apply bg-surface-light p-4 rounded-lg shadow-md;
+}
+
+.target-card {
+  @apply bg-surface-light p-4 rounded-lg shadow-md border-l-4 border-primary;
+}
+
+.btn-primary {
+  @apply bg-primary hover:opacity-90 text-white font-bold py-2 px-4 rounded;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-text-primary font-bold py-2 px-4 rounded;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+
+/* Custom scrollbar for Webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a202c; /* A bit darker than the body background */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a5568; /* A mid-gray color */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #718096; /* A lighter gray on hover */
+}
