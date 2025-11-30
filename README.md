@@ -1,170 +1,111 @@
-# Cyber-LynX Dashboard
+# Cyber-LynX
 
-A modern, responsive cybersecurity dashboard with user authentication, target management, and enhanced light/dark mode functionality.
+A modern, responsive cybersecurity dashboard and workflow automation platform.
+
+## Overview
+
+Cyber-LynX is designed to streamline cybersecurity assessment and penetration testing workflows. It features a powerful visual workflow builder, an integrated terminal for direct system interaction, and comprehensive target management. The platform is built with a Go backend for high performance and a React frontend for a dynamic and responsive user experience.
 
 ## Features
 
-### ✨ Enhanced Features
-- **Full CRUD operations for targets** - Add, edit, delete targets with proper user isolation
-- **Improved Light/Dark Mode** - Smooth transitions and comprehensive theme support
-- **AJAX-powered interface** - Real-time updates without page refreshes
-- **User authentication** - Secure login/signup system
-- **Responsive design** - Works on desktop and mobile devices
-- **Modern UI/UX** - Clean, professional interface with animations
+### ✨ Core Functionality
+- **Visual Workflow Builder:** Drag-and-drop interface to design and automate security assessment workflows.
+- **Integrated Terminal:** A dedicated page for direct command-line interaction with the system.
+- **Target Management:** Add, edit, and delete targets (websites, IPs, domains, subdomains) with user-specific isolation.
+- **User Authentication:** Secure login and signup system.
+- **Responsive Design:** Optimized for various devices, from desktop to mobile.
+- **Modern UI/UX:** Clean, intuitive, and professional interface with smooth transitions and animations.
+- **Light/Dark Mode:** Comprehensive theme support with persistence across sessions.
 
-### 🎯 Target Management
-- Add targets with different types (Website, IP, Domain, Subdomain)
-- Edit existing targets inline
-- Delete targets with confirmation
-- User-specific target isolation (users only see their own targets)
-- Real-time target count updates
+### 🚀 Workflow Automation
+- Drag and drop tools onto the canvas to build custom workflows.
+- Configure individual tool parameters.
+- Connect tools to define execution flow.
+- Save and load workflows for reusability.
 
-### 🎨 Theme System
-- Comprehensive light/dark mode support
-- Smooth transitions between themes
-- Theme persistence across sessions
-- CSS custom properties for consistent theming
-- Enhanced shadows and colors for both modes
+### 💻 Terminal Access
+- Execute commands directly from the web interface.
+- View real-time command output.
 
-### 🔐 Security Features
-- User authentication with session management
-- CSRF protection through user validation
-- SQL injection prevention with prepared statements
-- User isolation for all data operations
+## Technology Stack
+
+### Backend
+- **Go:** High-performance, concurrent backend services.
+- **Gin Gonic:** Web framework for building APIs.
+- **GORM:** ORM library for database interaction.
+- **SQLite:** Lightweight, file-based database for development and local deployments.
+
+### Frontend
+- **React:** A JavaScript library for building user interfaces.
+- **React Router DOM:** For declarative routing in React applications.
+- **React Flow:** For building interactive node-based editors (workflow canvas).
+- **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
+- **Chart.js:** For data visualization on the dashboard.
 
 ## Installation
 
 ### Prerequisites
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Web server (Apache/Nginx)
+
+-   **Go:** [Install Go](https://golang.org/doc/install) (version 1.18 or higher recommended)
+-   **Node.js & npm:** [Install Node.js](https://nodejs.org/en/download/) (which includes npm) (version 14 or higher recommended)
+-   **Git:** [Install Git](https://git-scm.com/downloads)
 
 ### Setup Steps
 
-1. **Configure database**
-   - Create a MySQL database
-   - Update `config.php` with your database credentials:
-   ```php
-   <?php
-   define('DB_HOST', 'localhost');
-   define('DB_USER', 'your_username');
-   define('DB_PASS', 'your_password');
-   define('DB_NAME', 'your_database_name');
-   ?>
-   ```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/cyber-lynx.git
+    cd cyber-lynx
+    ```
 
-2. **Run database setup**
-   ```bash
-   # Create tables
-   php setup.php
-   
-   # Run migration (if upgrading from older version)
-   php migrate.php
-   ```
+2.  **Backend Setup:**
+    ```bash
+    cd backend
+    go mod tidy
+    go run main.go # This will start the backend server
+    ```
+    The backend server will typically run on `http://localhost:8080`.
 
-3. **Set up web server**
-   - Point your web server to the project directory
-   - Ensure PHP has write permissions for session management
+3.  **Frontend Setup:**
+    ```bash
+    cd frontend
+    npm install
+    npm start # This will start the React development server
+    ```
+    The frontend development server will typically run on `http://localhost:3000`.
 
-4. **Access the application**
-   - Open your web browser
-   - Navigate to your domain/localhost
-   - Create a new account using the signup form
+4.  **Access the Application:**
+    -   Open your web browser and navigate to `http://localhost:3000`.
+    -   Register a new account or log in if you already have one.
 
 ## Usage
 
-### Managing Targets
+### Dashboard
 
-1. **Add a Target**
-   - Click "Add Target" button
-   - Select target type (Website, IP, Domain, Subdomain)
-   - Enter target value
-   - Add optional description
-   - Click "Add Target"
+The dashboard provides an overview of your security assessment activities, including target statistics and recent activities.
 
-2. **Edit a Target**
-   - Click the edit icon (✏️) on any target card
-   - Modify the information
-   - Click "Update Target"
+### Workflow Builder
 
-3. **Delete a Target**
-   - Click the delete icon (🗑️) on any target card
-   - Confirm the deletion in the popup
-   - Target is removed immediately from database and UI
+Navigate to the "Workflow" page to design your automation flows:
+1.  **Add Tools:** Drag and drop tools from the sidebar onto the canvas.
+2.  **Configure Tools:** Click on a tool node to open its configuration modal and set parameters.
+3.  **Connect Tools:** Draw connections between tool nodes to define the execution order.
+4.  **Save/Load:** Save your workflows to local storage or load previously saved ones.
 
-### Theme Management
+### Terminal
 
-- Click the theme toggle button in the sidebar
-- Switches between light and dark modes
-- Changes apply immediately with smooth transitions
-- Theme preference is saved to localStorage
-
-## Key Files Modified/Added
-
-- `api/delete_target.php` - Enhanced with JSON responses and better error handling
-- `api/add_target.php` - Updated to support both AJAX and regular requests
-- `js/main.js` - Improved AJAX handling and theme management
-- `css/style.css` - Enhanced theme system with better light/dark mode support
-- `setup.php` - Updated database schema with user relationships
-- `migrate.php` - Database migration script for existing installations
-- `views/dashboard.php` - Enhanced with edit/delete functionality
-
-## Database Structure
-
-### Users Table
-```sql
-CREATE TABLE users (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### Targets Table
-```sql
-CREATE TABLE targets (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    target_type VARCHAR(30) NOT NULL,
-    target_value VARCHAR(255) NOT NULL,
-    target_description TEXT,
-    user_id INT(6) UNSIGNED NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Targets not showing after upgrade**
-   - Run `php migrate.php` to add the user_id column
-   - Existing targets will be assigned to user ID 1
-
-2. **Delete functionality not working**
-   - Check browser console for JavaScript errors
-   - Verify the delete API endpoint is accessible
-   - Ensure user is properly logged in
-
-3. **Theme switching issues**
-   - Clear browser cache and localStorage
-   - Check if CSS custom properties are supported
-   - Verify JavaScript is enabled
-
-4. **AJAX requests failing**
-   - Check browser network tab for HTTP errors
-   - Verify API endpoints return valid JSON
-   - Check PHP error logs
+Access the dedicated "Terminal" page from the sidebar to interact directly with the underlying system via a command-line interface.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Test your changes thoroughly
-4. Submit a pull request with detailed description
+We welcome contributions! Please follow these steps:
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/your-feature-name`).
+3.  Make your changes and ensure tests pass.
+4.  Commit your changes (`git commit -m 'feat: Add new feature'`).
+5.  Push to the branch (`git push origin feature/your-feature-name`).
+6.  Open a Pull Request.
 
 ## License
 
-MIT License - feel free to use and modify as needed.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
