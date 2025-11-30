@@ -1,14 +1,33 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { ThemeContext } from '../context/ThemeContext';
+import { useAddTargetModal } from '../context/AddTargetModalContext';
+import AddTargetModal from '../components/AddTargetModal';
 Chart.register(...registerables);
 
 const Dashboard = () => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const { darkMode } = useContext(ThemeContext);
+  const { isModalOpen, openModal, closeModal } = useAddTargetModal();
+  const [targets, setTargets] = useState([]);
 
   useEffect(() => {
+    const fetchTargets = async () => {
+      try {
+        const response = await fetch('/api/targets');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTargets(data);
+      } catch (error) {
+        console.error('Error fetching targets:', error);
+      }
+    };
+
+    fetchTargets();
+
     if (chartInstance.current) {
       chartInstance.current.destroy();
     }
@@ -76,11 +95,29 @@ const Dashboard = () => {
     };
   }, [darkMode]);
 
-  const sampleTargets = [
-    { id: 1, type: 'domain', value: 'example.com', description: 'Main company website' },
-    { id: 2, type: 'ip', value: '192.168.1.1', description: 'Internal network gateway' },
-    { id: 3, type: 'url', value: 'https://dev.example.com/app', description: 'Development environment' },
-  ];
+  const handleAddTarget = async (newTarget) => {
+    try {
+      const response = await fetch('/api/targets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTarget),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const addedTarget = await response.json();
+      setTargets((prevTargets) => [...prevTargets, addedTarget]);
+      console.log('New Target Added:', addedTarget);
+      return addedTarget;
+    } catch (error) {
+      console.error('Error adding target:', error);
+      throw error; // Re-throw so modal can handle it
+    }
+  };
 
   return (
     <div>
@@ -107,7 +144,7 @@ const Dashboard = () => {
               <div className="text-muted text-xs">Active</div>
             </div>
           </div>
-          <div className="text-3xl font-bold text-text-primary mb-1" id="total-targets">15</div>
+          <div className="text-3xl font-bold text-text-primary mb-1" id="total-targets">{targets.length}</div>
           <div className="flex items-center text-muted text-sm">
             <svg className="w-4 h-4 mr-1 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -279,7 +316,7 @@ const Dashboard = () => {
             </svg>
             Added Targets
           </h3>
-          <button id="dashboard-add-target-btn" className="btn btn-primary">
+          <button id="dashboard-add-target-btn" className="btn btn-primary" onClick={openModal}>
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
@@ -287,7 +324,7 @@ const Dashboard = () => {
           </button>
         </div>
         <div id="targets-list" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sampleTargets.map(target => (
+          {targets.map(target => (
             <div key={target.id} className="target-card bg-surface-light p-4 rounded-lg shadow-md border-l-4 border-primary transition-all duration-300">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-lg font-semibold text-primary">{target.type}</p>
@@ -311,6 +348,7 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
+      <AddTargetModal isOpen={isModalOpen} onClose={closeModal} onAddTarget={handleAddTarget} />
     </div>
   );
 };

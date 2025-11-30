@@ -93,6 +93,14 @@ func addTargetHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(target)
 }
 
+func getTargetsHandler(w http.ResponseWriter, r *http.Request) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(targets)
+}
+
 func main() {
 	r := mux.NewRouter()
 
@@ -100,6 +108,7 @@ func main() {
 	api.HandleFunc("/signup", signupHandler).Methods("POST")
 	api.HandleFunc("/login", loginHandler).Methods("POST")
 	api.HandleFunc("/targets", addTargetHandler).Methods("POST")
+	api.HandleFunc("/targets", getTargetsHandler).Methods("GET")
 	api.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{"message": "Hello from the Go API"})
