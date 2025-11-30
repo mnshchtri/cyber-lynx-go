@@ -17,6 +17,10 @@ module.exports = {
         'surface-light': 'var(--surface-light)',
         'text-primary': 'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',
+      },
+      maxHeight: {
+        'screen-75': '75vh',
+        'screen-80': '80vh',
       }
     },
   },
